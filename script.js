@@ -752,6 +752,14 @@ document.addEventListener('DOMContentLoaded', function() {
     initDatabase();
 });
 
+// ===== AÑO AUTOMÁTICO EN EL FOOTER =====
+document.addEventListener('DOMContentLoaded', function() {
+    const yearSpan = document.getElementById('currentYear');
+    if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+    }
+});
+
 // Exponer funciones globalmente
 window.runQuery = runQuery;
 window.resetDatabase = resetDatabase;

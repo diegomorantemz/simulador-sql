@@ -760,18 +760,121 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     max-width: 100%;
 }
 
-/* ===== FOOTER ===== */
+/* ===== FOOTER MEJORADO ===== */
 footer {
     margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #e9ecef;
-    text-align: center;
+    padding: 25px 20px 20px;
+    border-top: 3px solid #667eea;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 0 0 20px 20px;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.brand-name {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #667eea;
+    letter-spacing: 2px;
+    position: relative;
+}
+
+.brand-name::after {
+    content: '™';
+    font-size: 0.6em;
+    color: #764ba2;
+    position: absolute;
+    top: -5px;
+    margin-left: 2px;
+}
+
+.brand-tagline {
+    font-size: 0.8em;
     color: #999;
+    font-weight: 300;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+.footer-copy {
+    text-align: center;
+    color: #666;
     font-size: 0.9em;
 }
 
-footer p {
-    line-height: 1.6;
+.footer-copy p {
+    margin: 0;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 0.85em;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.footer-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #667eea;
+    transition: width 0.3s;
+}
+
+.footer-links a:hover {
+    color: #764ba2;
+}
+
+.footer-links a:hover::after {
+    width: 100%;
+}
+
+/* Responsive del footer */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .footer-brand {
+        align-items: center;
+    }
+    
+    .footer-links {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-links {
+        flex-direction: column;
+        gap: 8px;
+    }
 }
 
 /* ===== RESPONSIVE ===== */
