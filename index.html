@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Base de Datos SQL</title>
+    
+    <!-- Estilos principales -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- CodeMirror para resaltado de sintaxis -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sql/sql.min.js"></script>
+    
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗄️ Simulador de Base de Datos</h1>
+            <p>Practica SQL en tu navegador sin instalar nada</p>
+            <div class="header-buttons">
+                <button onclick="exportDatabase()" class="btn-secondary">💾 Exportar BD</button>
+                <button onclick="document.getElementById('importFile').click()" class="btn-secondary">📂 Importar BD</button>
+                <input type="file" id="importFile" accept=".sqlite" style="display:none" onchange="importDatabase(event)">
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Panel de información -->
+            <div class="info-panel">
+                <h3>📊 Tablas disponibles</h3>
+                <div id="tableInfo">
+                    <p>Cargando...</p>
+                </div>
+            </div>
+
+            <!-- Panel de consultas -->
+            <div class="query-panel">
+                <h3>✏️ Escribe tu consulta SQL</h3>
+                <textarea id="sqlEditor" rows="6" placeholder="Ejemplo: SELECT * FROM estudiantes;">SELECT * FROM estudiantes;</textarea>
+                
+                <div class="button-group">
+                    <button id="executeBtn" onclick="runQuery()">▶️ Ejecutar (Ctrl+Enter)</button>
+                    <button onclick="clearEditor()" class="btn-secondary">🧹 Limpiar (Ctrl+L)</button>
+                    <button onclick="resetDatabase()">🔄 Reiniciar BD</button>
+                    <button onclick="showExamples()">📚 Ver ejemplos</button>
+                    <button onclick="clearHistory()">🗑️ Limpiar historial</button>
+                </div>
+
+                <!-- Historial de consultas -->
+                <div class="history-panel">
+                    <h4>📜 Historial de Consultas</h4>
+                    <ul id="historyList">
+                        <li style="color:#999;border-left-color:#999;">No hay consultas aún</li>
+                    </ul>
+                </div>
+
+                <!-- Resultados -->
+                <div id="resultArea">
+                    <h4>📋 Resultados</h4>
+                    <div id="resultOutput">Esperando consulta...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editor de tablas -->
+        <div class="table-editor">
+            <h4>📝 Editor de Tablas</h4>
+            <div class="table-editor-controls">
+                <select id="tableSelector" onchange="loadTableEditor()">
+                    <option value="estudiantes">Estudiantes</option>
+                    <option value="cursos">Cursos</option>
+                    <option value="inscripciones">Inscripciones</option>
+                </select>
+                <button onclick="loadTableEditor()" class="btn-secondary">🔄 Refrescar</button>
+                <button onclick="addRow(document.getElementById('tableSelector').value)" class="btn-secondary">➕ Agregar fila</button>
+                <button onclick="saveTableChanges(document.getElementById('tableSelector').value)" class="btn-save">💾 Guardar cambios</button>
+            </div>
+            <div id="tableEditorContent"></div>
+            <div style="margin-top: 10px; font-size: 12px; color: #999;">
+                💡 Edita los valores en las celdas y haz clic en "Guardar cambios" para actualizar la base de datos
+            </div>
+        </div>
+
+        <!-- Diagrama de Relaciones -->
+        <div class="diagram-panel">
+            <h4>🗺️ Diagrama de Relaciones (ERD)</h4>
+            <div class="diagram-controls">
+                <button onclick="generateDiagram()" class="btn-secondary">🔄 Actualizar Diagrama</button>
+                <button onclick="toggleDiagramView()" class="btn-secondary">👁️ Vista completa</button>
+            </div>
+            <div id="diagramContainer">
+                <div class="diagram-loading">⏳ Generando diagrama...</div>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts-panel">
+            <h4>📊 Visualización de Datos</h4>
+            <div class="charts-container">
+                <div class="chart-box">
+                    <canvas id="chartCarreras"></canvas>
+                </div>
+                <div class="chart-box">
+                    <canvas id="chartPromedios"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Proyecto educativo - SQL Simulator v2.0 | Atajos: Ctrl+Enter (ejecutar) | Ctrl+Shift+R (reiniciar) | Ctrl+E (ejemplos) | Ctrl+L (limpiar)</p>
+        </footer>
+    </div>
+
+    <!-- Cargar sql.js -->
+    <script src="https://sql.js.org/dist/sql-wasm.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
