@@ -3,16 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Base de Datos SQL</title>
+    <title>Simulador de Base de Datos SQL - MNTWARE</title>
     
     <!-- Estilos principales -->
     <link rel="stylesheet" href="style.css">
-    
-    <!-- CodeMirror para resaltado de sintaxis -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sql/sql.min.js"></script>
     
     <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -34,35 +28,60 @@
             <div class="info-panel">
                 <h3>📊 Tablas disponibles</h3>
                 <div id="tableInfo">
-                    <p>Cargando...</p>
+                    <p class="text-muted">⏳ Cargando tablas...</p>
                 </div>
             </div>
 
             <!-- Panel de consultas -->
             <div class="query-panel">
                 <h3>✏️ Escribe tu consulta SQL</h3>
+                
+                <!-- Textarea con scroll horizontal y vertical -->
                 <textarea id="sqlEditor" rows="6" placeholder="Ejemplo: SELECT * FROM estudiantes;">SELECT * FROM estudiantes;</textarea>
                 
                 <div class="button-group">
                     <button id="executeBtn" onclick="runQuery()">▶️ Ejecutar (Ctrl+Enter)</button>
                     <button onclick="clearEditor()" class="btn-secondary">🧹 Limpiar (Ctrl+L)</button>
-                    <button onclick="resetDatabase()">🔄 Reiniciar BD</button>
-                    <button onclick="showExamples()">📚 Ver ejemplos</button>
-                    <button onclick="clearHistory()">🗑️ Limpiar historial</button>
+                    <button onclick="resetDatabase()" class="btn-secondary">🔄 Reiniciar BD</button>
+                    
+                    <!-- Selector de categorías -->
+                    <div class="example-selector">
+                        <select id="categorySelector">
+                            <option value="basicos">📌 Básicos</option>
+                            <option value="filtros">🔍 Filtros (WHERE)</option>
+                            <option value="orden">📊 Ordenamiento</option>
+                            <option value="agregacion">📈 Agregaciones</option>
+                            <option value="groupby">📊 Agrupaciones</option>
+                            <option value="having">🎯 HAVING</option>
+                            <option value="join" selected>🔗 JOIN</option>
+                            <option value="subconsultas">🔍 Subconsultas</option>
+                            <option value="operadores">🎯 Operadores</option>
+                            <option value="avanzado">🚀 Avanzadas</option>
+                            <option value="modificacion">✏️ Modificación</option>
+                            <option value="aleatorio">🎲 Aleatorio</option>
+                        </select>
+                        <button onclick="showExampleByCategory()" class="btn-secondary">📚 Cargar Ejemplo</button>
+                    </div>
+                    
+                    <button onclick="clearHistory()" class="btn-secondary">🗑️ Limpiar historial</button>
                 </div>
 
                 <!-- Historial de consultas -->
                 <div class="history-panel">
                     <h4>📜 Historial de Consultas</h4>
                     <ul id="historyList">
-                        <li style="color:#999;border-left-color:#999;">No hay consultas aún</li>
+                        <li class="empty-history">No hay consultas aún</li>
                     </ul>
                 </div>
 
                 <!-- Resultados -->
                 <div id="resultArea">
                     <h4>📋 Resultados</h4>
-                    <div id="resultOutput">Esperando consulta...</div>
+                    <div id="resultOutput" class="result-placeholder">
+                        <span class="placeholder-icon">💡</span>
+                        <p>Escribe una consulta SQL y presiona "Ejecutar"</p>
+                        <small>o selecciona un ejemplo del menú desplegable</small>
+                    </div>
                 </div>
             </div>
         </div>
@@ -72,16 +91,18 @@
             <h4>📝 Editor de Tablas</h4>
             <div class="table-editor-controls">
                 <select id="tableSelector" onchange="loadTableEditor()">
-                    <option value="estudiantes">Estudiantes</option>
-                    <option value="cursos">Cursos</option>
-                    <option value="inscripciones">Inscripciones</option>
+                    <option value="estudiantes">📋 Estudiantes</option>
+                    <option value="cursos">📋 Cursos</option>
+                    <option value="inscripciones">📋 Inscripciones</option>
                 </select>
                 <button onclick="loadTableEditor()" class="btn-secondary">🔄 Refrescar</button>
                 <button onclick="addRow(document.getElementById('tableSelector').value)" class="btn-secondary">➕ Agregar fila</button>
                 <button onclick="saveTableChanges(document.getElementById('tableSelector').value)" class="btn-save">💾 Guardar cambios</button>
             </div>
-            <div id="tableEditorContent"></div>
-            <div style="margin-top: 10px; font-size: 12px; color: #999;">
+            <div id="tableEditorContent">
+                <p class="text-muted" style="text-align:center;padding:20px;">Cargando datos...</p>
+            </div>
+            <div class="table-editor-hint">
                 💡 Edita los valores en las celdas y haz clic en "Guardar cambios" para actualizar la base de datos
             </div>
         </div>
@@ -111,6 +132,7 @@
             </div>
         </div>
 
+        <!-- Footer -->
         <footer>
             <div class="footer-content">
                 <div class="footer-brand">
@@ -121,12 +143,13 @@
                     <p>© <span id="currentYear"></span> MNTWARE. Todos los derechos reservados.</p>
                 </div>
                 <div class="footer-links">
-                    <a href="#" onclick="alert('Próximamente...')">Política de Privacidad</a>
-                    <a href="#" onclick="alert('Próximamente...')">Términos de Uso</a>
-                    <a href="mailto:contacto@mntware.com">Contacto</a>
+                    <a href="#" onclick="alert('📝 Próximamente disponible')">Política de Privacidad</a>
+                    <a href="#" onclick="alert('📝 Próximamente disponible')">Términos de Uso</a>
+                    <a href="mailto:contacto@mntware.com">📧 Contacto</a>
                 </div>
             </div>
         </footer>
+    </div>
 
     <!-- Cargar sql.js -->
     <script src="https://sql.js.org/dist/sql-wasm.js"></script>

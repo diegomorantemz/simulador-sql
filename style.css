@@ -70,6 +70,7 @@ header p {
     border-left: 4px solid #667eea;
     max-height: 700px;
     overflow-y: auto;
+    overflow-x: auto;
 }
 
 .info-panel h3 {
@@ -82,7 +83,6 @@ header p {
     z-index: 5;
 }
 
-/* Tarjeta de cada tabla */
 .table-card {
     background: white;
     border-radius: 8px;
@@ -119,14 +119,14 @@ header p {
 
 .table-scroll {
     max-height: 200px;
-    overflow-y: auto;
+    overflow: auto;
 }
 
-/* Tablas de información */
 .info-table {
     width: 100%;
     font-size: 0.85em;
     border-collapse: collapse;
+    min-width: 400px;
 }
 
 .info-table thead {
@@ -151,6 +151,17 @@ header p {
     border-bottom: 1px solid #f1f3f5;
     color: #444;
     font-size: 0.9em;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.info-table td:hover {
+    overflow: visible;
+    white-space: normal;
+    word-wrap: break-word;
+    background: #f8f9fa;
 }
 
 .info-table tbody tr:hover {
@@ -165,10 +176,11 @@ header p {
     background: #f1f3f5;
 }
 
-/* Scrollbar */
+/* ===== SCROLLBAR PARA INFO-PANEL ===== */
 .info-panel::-webkit-scrollbar,
 .table-scroll::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
 }
 
 .info-panel::-webkit-scrollbar-track,
@@ -200,24 +212,61 @@ header p {
     margin-bottom: 15px;
 }
 
-/* ===== CODEMIRROR ===== */
-.CodeMirror {
+/* ===== TEXTAREA CON SCROLL HORIZONTAL Y VERTICAL ===== */
+#sqlEditor {
+    width: 100%;
+    height: 180px;
+    padding: 12px 15px;
     border: 2px solid #ddd;
     border-radius: 8px;
     font-family: 'Courier New', monospace;
     font-size: 14px;
-    height: auto !important;
-    min-height: 180px;
-    margin-bottom: 15px;
+    line-height: 1.6;
+    resize: none;
+    background: white;
+    color: #333;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    /* Scroll horizontal y vertical */
+    overflow: auto !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    word-break: break-all !important;
 }
 
-.CodeMirror-focused {
+#sqlEditor:focus {
+    outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
+#sqlEditor::placeholder {
+    color: #aaa;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Scrollbar personalizada para textarea */
+#sqlEditor::-webkit-scrollbar {
+    height: 8px !important;
+    width: 8px !important;
+}
+
+#sqlEditor::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+    border-radius: 4px !important;
+}
+
+#sqlEditor::-webkit-scrollbar-thumb {
+    background: #667eea !important;
+    border-radius: 4px !important;
+}
+
+#sqlEditor::-webkit-scrollbar-thumb:hover {
+    background: #5a6fd6 !important;
+}
+
 #sqlEditor {
-    display: none;
+    scrollbar-width: thin !important;
+    scrollbar-color: #667eea #f1f1f1 !important;
 }
 
 /* ===== BOTONES ===== */
@@ -280,6 +329,36 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     transform: translateY(-2px);
 }
 
+/* ===== SELECTOR DE CATEGORÍAS ===== */
+.example-selector {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.example-selector select {
+    padding: 8px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 13px;
+    background: white;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 180px;
+}
+
+.example-selector select:hover {
+    border-color: #667eea;
+}
+
+.example-selector select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
 /* ===== HISTORIAL ===== */
 .history-panel {
     margin-top: 15px;
@@ -298,7 +377,7 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     list-style: none;
     padding: 0;
     max-height: 150px;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 #historyList li {
@@ -311,6 +390,9 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     font-size: 13px;
     transition: background 0.3s;
     border-left: 3px solid #667eea;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #historyList li:hover {
@@ -319,6 +401,7 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
 
 #historyList::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
 }
 
 #historyList::-webkit-scrollbar-track {
@@ -331,7 +414,7 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     border-radius: 3px;
 }
 
-/* ===== RESULTADOS ===== */
+/* ===== RESULTADOS CON SCROLL ===== */
 #resultArea {
     margin-top: 20px;
     background: white;
@@ -346,35 +429,116 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
 }
 
 #resultOutput {
-    font-family: 'Courier New', monospace;
+    font-family: 'Segoe UI', sans-serif;
     font-size: 14px;
-    min-height: 100px;
+    min-height: 80px;
     padding: 10px;
-    background: #f8f9fa;
+    background: #fafbfc;
     border-radius: 5px;
-    overflow-x: auto;
 }
 
-#resultOutput table {
+.result-placeholder {
+    text-align: center;
+    color: #999;
+    padding: 30px 20px;
+}
+
+.result-placeholder .placeholder-icon {
+    font-size: 2em;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.result-placeholder p {
+    margin: 5px 0;
+}
+
+.result-placeholder small {
+    font-size: 12px;
+    color: #bbb;
+}
+
+/* Contenedor de resultados con scroll horizontal y vertical */
+.result-container {
+    max-height: 450px;
+    overflow: auto !important;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+}
+
+.result-container table {
     width: 100%;
     border-collapse: collapse;
-    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    min-width: 700px;
 }
 
-#resultOutput th {
-    background: #667eea;
-    color: white;
-    padding: 10px;
-    text-align: left;
+.result-container thead th {
+    background: #667eea !important;
+    color: white !important;
+    padding: 10px 14px !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+    font-weight: 600 !important;
 }
 
-#resultOutput td {
-    padding: 8px 10px;
-    border-bottom: 1px solid #dee2e6;
+.result-container tbody td {
+    padding: 8px 14px !important;
+    border-bottom: 1px solid #f1f3f5 !important;
+    max-width: 300px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
 }
 
-#resultOutput tr:hover {
-    background: #f1f3f5;
+.result-container tbody td:hover {
+    overflow: visible !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    background: #f8f9fa !important;
+    position: relative;
+    z-index: 5;
+}
+
+.result-container tbody tr:hover td {
+    background: #f1f3f5 !important;
+}
+
+.result-container tbody tr:nth-child(even) td {
+    background: #fafbfc !important;
+}
+
+.result-container tbody tr:nth-child(even):hover td {
+    background: #f1f3f5 !important;
+}
+
+/* Scrollbar para resultados */
+.result-container::-webkit-scrollbar {
+    height: 8px !important;
+    width: 8px !important;
+}
+
+.result-container::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+    border-radius: 4px !important;
+}
+
+.result-container::-webkit-scrollbar-thumb {
+    background: #667eea !important;
+    border-radius: 4px !important;
+}
+
+.result-container::-webkit-scrollbar-thumb:hover {
+    background: #5a6fd6 !important;
+}
+
+.result-container {
+    scrollbar-width: thin !important;
+    scrollbar-color: #667eea #f1f1f1 !important;
 }
 
 /* ===== EDITOR DE TABLAS ===== */
@@ -414,7 +578,7 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
 
 #tableEditorContent {
     max-height: 400px;
-    overflow-y: auto;
+    overflow: auto;
     background: white;
     border-radius: 8px;
     padding: 10px;
@@ -423,6 +587,7 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
 #tableEditorContent table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 500px;
 }
 
 #tableEditorContent th {
@@ -471,6 +636,7 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
 
 #tableEditorContent::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
 }
 
 #tableEditorContent::-webkit-scrollbar-track {
@@ -519,7 +685,6 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     padding: 40px 0;
 }
 
-/* Vista completa */
 #diagramContainer.full-view {
     position: fixed;
     top: 20px;
@@ -533,14 +698,6 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     box-shadow: 0 20px 80px rgba(0,0,0,0.5);
     overflow: auto;
     min-height: auto;
-}
-
-#diagramContainer.full-view .diagram-erd {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .diagram-overlay {
@@ -587,7 +744,6 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     display: flex;
 }
 
-/* Estilos del diagrama ERD */
 .diagram-erd {
     display: flex;
     justify-content: center;
@@ -596,6 +752,7 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     gap: 30px;
     padding: 20px;
     min-height: 200px;
+    min-width: 500px;
 }
 
 .entity-box {
@@ -645,28 +802,11 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     color: #667eea;
     font-weight: bold;
 }
-
-.entity-box .pk::after {
-    content: ' 🔑';
-}
-
-.entity-box .fk {
-    color: #764ba2;
-    font-weight: bold;
-}
-
-.entity-box .fk::after {
-    content: ' 🔗';
-}
-
-.entity-box .pk-fk {
-    color: #dc3545;
-    font-weight: bold;
-}
-
-.entity-box .pk-fk::after {
-    content: ' 🔑🔗';
-}
+.entity-box .pk::after { content: ' 🔑'; }
+.entity-box .fk { color: #764ba2; font-weight: bold; }
+.entity-box .fk::after { content: ' 🔗'; }
+.entity-box .pk-fk { color: #dc3545; font-weight: bold; }
+.entity-box .pk-fk::after { content: ' 🔑🔗'; }
 
 .relation-group {
     display: flex;
@@ -692,33 +832,19 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     white-space: nowrap;
 }
 
-/* Responsive del diagrama */
 @media (max-width: 768px) {
     .diagram-erd {
         flex-direction: column;
         gap: 15px;
+        min-width: unset;
     }
-    
     .relation-group {
         flex-direction: row;
     }
-    
     .entity-box {
         min-width: 150px;
         width: 100%;
         max-width: 300px;
-    }
-}
-
-@media (max-width: 480px) {
-    .entity-box {
-        min-width: 120px;
-        padding: 10px;
-    }
-    
-    .entity-box ul li {
-        font-size: 11px;
-        padding: 3px 5px;
     }
 }
 
@@ -760,7 +886,7 @@ button:not(#executeBtn):not(.btn-secondary):not(.btn-save):hover {
     max-width: 100%;
 }
 
-/* ===== FOOTER MEJORADO ===== */
+/* ===== FOOTER ===== */
 footer {
     margin-top: 30px;
     padding: 25px 20px 20px;
@@ -853,68 +979,93 @@ footer {
     width: 100%;
 }
 
-/* Responsive del footer */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
     .footer-content {
         flex-direction: column;
         text-align: center;
         gap: 10px;
     }
-    
     .footer-brand {
         align-items: center;
     }
-    
     .footer-links {
         justify-content: center;
     }
-}
-
-@media (max-width: 480px) {
-    .footer-links {
+    .example-selector {
+        width: 100%;
         flex-direction: column;
-        gap: 8px;
+    }
+    .example-selector select {
+        width: 100%;
+        min-width: unset;
+    }
+    .example-selector button {
+        width: 100%;
     }
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 480px) {
     .container {
         padding: 15px;
     }
-    
     header h1 {
         font-size: 1.8em;
     }
-    
     .button-group {
         flex-direction: column;
     }
-    
     .button-group button {
         width: 100%;
     }
-    
     .header-buttons {
         flex-direction: column;
         align-items: center;
     }
-    
     .header-buttons button {
         width: 100%;
         max-width: 300px;
     }
-    
     .table-editor-controls {
         flex-direction: column;
     }
-    
     .table-editor-controls select,
     .table-editor-controls button {
         width: 100%;
     }
-    
     .info-panel {
         max-height: 400px;
     }
+    .result-container {
+        max-height: 300px;
+    }
+    #sqlEditor {
+        height: 120px;
+        font-size: 13px;
+    }
+}
+
+/* ===== SCROLLBAR GLOBAL ===== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #5a6fd6;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #667eea #f1f1f1;
 }
