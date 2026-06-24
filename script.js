@@ -1099,6 +1099,49 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// ===== DONACIONES CON QR LOCAL (VERSIÓN SIMPLE) =====
+function showDonationQR(type) {
+    const container = document.getElementById('donationQRContainer');
+    const content = document.getElementById('donationQRContent');
+    
+    // QR desde imágenes locales (TÚ SOLO PUEDES CAMBIARLAS)
+    const qrImages = {
+        'yape': {
+            title: '📱 Yape',
+            subtitle: 'Escanea el QR con Yape para donar',
+            image: 'images/qr-yape.jpeg'  // ← Tu QR real
+        },
+        'plin': {
+            title: '📱 Plin',
+            subtitle: 'Escanea el QR con Plin para donar',
+            image: 'images/qr-plin.jpeg'  // ← Tu QR real
+        }
+    };
+    
+    const qrData = qrImages[type];
+    if (!qrData) return;
+    
+    content.innerHTML = `
+        <div class="qr-title">${qrData.title}</div>
+        <img src="${qrData.image}" alt="QR para ${qrData.title}" />
+        <div class="qr-subtitle">${qrData.subtitle}</div>
+        <div class="qr-footer">
+            ⭐ ¡Gracias por tu apoyo! 
+            <br>
+            <span style="font-size:0.9em;color:#999;">
+                Todas las donaciones son voluntarias
+            </span>
+        </div>
+    `;
+    
+    container.style.display = 'block';
+    container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function closeDonationQR() {
+    document.getElementById('donationQRContainer').style.display = 'none';
+}
+
 // Exponer funciones globalmente
 window.runQuery = runQuery;
 window.resetDatabase = resetDatabase;
@@ -1116,3 +1159,6 @@ window.saveTableChanges = saveTableChanges;
 window.generateDiagram = generateDiagram;
 window.toggleDiagramView = toggleDiagramView;
 window.showExampleByCategory = showExampleByCategory;
+// ===== NUEVAS FUNCIONES DE DONACIONES =====
+window.showDonationQR = showDonationQR;
+window.closeDonationQR = closeDonationQR;

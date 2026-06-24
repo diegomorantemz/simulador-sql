@@ -132,6 +132,27 @@
             </div>
         </div>
 
+        <!-- Donaciones -->
+        <div class="donations-panel">
+            <h4>❤️ Apoya el proyecto</h4>
+            <p class="donations-text">
+                Si este simulador te ha sido útil, considera hacer una donación voluntaria.
+                ¡Cualquier aporte es bienvenido!
+            </p>
+            <div class="donations-buttons">
+                <button onclick="showDonationQR('yape')" class="btn-donation yape">
+                    <span class="donation-icon">📱</span> Yape
+                </button>
+                <button onclick="showDonationQR('plin')" class="btn-donation plin">
+                    <span class="donation-icon">📱</span> Plin
+                </button>
+            </div>
+            <div id="donationQRContainer" style="display:none; margin-top:15px;">
+                <div id="donationQRContent"></div>
+                <button onclick="closeDonationQR()" class="btn-secondary" style="margin-top:10px;">✕ Cerrar</button>
+            </div>
+        </div>
+
         <!-- Footer -->
         <footer>
             <div class="footer-content">
